@@ -1,0 +1,865 @@
+/* ===== COLORES: cambia aquí y se actualiza en toda la página ===== */
+:root {
+  --bg: #fbf5ea;
+  --surface: #fff;
+  --ink: #3a1f12;
+  --muted: #7a5f50;
+  --line: #eadfcb;
+  --red: #d7141f;
+  --blue: #1f3a8a;
+  --gold: #e8a53a;
+  --on-color: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1d1410;
+    --surface: #2a1d17;
+    --ink: #f6ebdc;
+    --muted: #c7ad98;
+    --line: #44312a;
+    --red: #ff4d55;
+    --blue: #8fa8ff;
+    --gold: #f0b24a;
+    --on-color: #1d1410;
+  }
+}
+
+/* ===== BASE ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font:
+    clamp(16px, 0.35vw + 15px, 18px)/1.6 "DM Sans",
+    system-ui,
+    sans-serif;
+  /* deja espacio en teléfonos con muesca */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+img,
+svg {
+  max-width: 100%;
+}
+h1,
+h2,
+h3 {
+  font-family: "Kaushan Script", "DM Sans", cursive;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.15;
+}
+a {
+  color: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+.wrap {
+  max-width: 1040px;
+  margin: auto;
+  padding: 0 clamp(16px, 4vw, 28px);
+}
+
+/* ===== MENÚ Y PORTADA ===== */
+nav {
+  display: flex;
+  gap: 4px 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 12px 16px;
+  font-weight: 500;
+}
+nav a {
+  text-decoration: none;
+  padding: 10px 4px;
+  border-bottom: 2px solid transparent;
+}
+nav a:hover {
+  border-color: var(--red);
+}
+.hero {
+  text-align: center;
+  padding: 12px 20px 0;
+}
+.hero img {
+  width: clamp(190px, 42vw, 320px);
+  height: auto;
+  border-radius: 50%;
+  background: #fff;
+}
+.hero p {
+  max-width: 46ch;
+  margin: 8px auto 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+.ribbon {
+  display: block;
+  width: 100%;
+  height: clamp(36px, 6vw, 60px);
+  margin-top: 10px;
+}
+
+/* ===== SECCIONES ===== */
+section {
+  padding: clamp(28px, 5vw, 44px) 0 8px;
+}
+section h2 {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  margin-bottom: 6px;
+}
+.lead {
+  color: var(--muted);
+  margin: 0 0 20px;
+  max-width: 60ch;
+}
+
+/* ===== CARRUSELES (TikTok e Instagram): se deslizan con el dedo o el mouse ===== */
+.track,
+.igPosts {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 4px 2px 14px;
+  -webkit-overflow-scrolling: touch;
+}
+.track > *,
+.igPosts > * {
+  flex: 0 0 min(340px, 88%);
+  scroll-snap-align: start;
+  margin: 0 !important;
+  min-width: 0;
+}
+.empty {
+  padding: 24px;
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  color: var(--muted);
+}
+.arrows {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+/* ===== BOTONES (mínimo 44px de alto para que se toquen bien con el dedo) ===== */
+.btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  background: var(--red);
+  color: var(--on-color);
+  text-align: center;
+}
+.btn.alt {
+  background: var(--blue);
+}
+.btn.line {
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--line);
+}
+.btn:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* ===== GALERÍA: se acomoda sola, 1, 2, 3 o más columnas según el ancho ===== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+  gap: 12px;
+}
+.ph {
+  aspect-ratio: 4/3;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  background: linear-gradient(150deg, #1f3a8a, #0d1a45);
+}
+.ph img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== CONTACTO ===== */
+.contact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 14px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+}
+.card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+.card p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.row .btn {
+  flex: 1 1 130px;
+}
+
+/* ===== VENTANA DEL FORMULARIO ===== */
+dialog {
+  border: 0;
+  border-radius: 18px;
+  padding: 0;
+  max-width: 480px;
+  width: calc(100% - 32px);
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  background: var(--surface);
+  color: var(--ink);
+}
+dialog::backdrop {
+  background: rgba(29, 20, 16, 0.6);
+}
+.mbody {
+  padding: clamp(18px, 4vw, 24px);
+}
+.mbody h3 {
+  font-size: 1.8rem;
+  margin-bottom: 2px;
+}
+.mbody label {
+  display: block;
+  font-weight: 500;
+  margin: 14px 0 4px;
+}
+.mbody input,
+.mbody textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.two {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 10px;
+}
+.mx {
+  all: unset;
+  cursor: pointer;
+  float: right;
+  font-size: 1.8rem;
+  line-height: 1;
+  padding: 6px 10px;
+}
+.mrow {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.mbody input.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+}
+#status {
+  margin: 12px 0 0;
+  color: var(--red);
+  min-height: 1.2em;
+}
+[hidden] {
+  display: none !important;
+}
+footer {
+  margin-top: 50px;
+  padding: 28px 20px 36px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Oculta la barra de desplazamiento de los carruseles (siguen funcionando) */
+.track,
+.igPosts {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.track::-webkit-scrollbar,
+.igPosts::-webkit-scrollbar {
+  display: none;
+}
+
+/* Centra el contenido de la tarjeta "Por correo" (vertical y horizontalmente) */
+.contact .card:first-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.contact .card:first-child p {
+  max-width: 30ch;
+}
+
+/* ===== Formulario más compacto: sin scroll y con los botones visibles ===== */
+.mbody {
+  padding: clamp(16px, 3vw, 22px);
+}
+.mbody h3 {
+  font-size: 1.6rem;
+}
+.mbody .lead {
+  margin: 0 0 4px !important;
+  line-height: 1.4;
+}
+.mbody label {
+  margin: 10px 0 3px;
+}
+.mbody input,
+.mbody textarea {
+  padding: 8px 12px;
+}
+.mbody textarea {
+  height: 84px;
+  resize: none;
+  display: block;
+}
+#status {
+  margin: 6px 0 0;
+  min-height: 0;
+}
+.mrow {
+  margin-top: 12px;
+}
+
+/* Oculta la barra de desplazamiento de la ventana (si la pantalla es muy baja, se sigue pudiendo deslizar) */
+dialog {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+dialog::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== Álbumes (tarjetas tipo carpeta) ===== */
+.album {
+  all: unset;
+  cursor: pointer;
+  display: block;
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(150deg, #1f3a8a, #0d1a45);
+  color: #fff;
+}
+.album img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.album:hover img {
+  transform: scale(1.05);
+}
+.album::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent 55%);
+}
+.album span {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  z-index: 1;
+  font-weight: 700;
+}
+.album small {
+  display: block;
+  font-weight: 400;
+  opacity: 0.9;
+}
+.album:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+.album.vacio {
+  cursor: default;
+}
+
+/* ===== Modal del álbum: todas las fotos en cuadrícula ===== */
+.lb {
+  border: 0;
+  border-radius: 18px;
+  padding: 0;
+  width: calc(100% - 32px);
+  max-width: 960px;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  background: var(--surface);
+  color: var(--ink);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.lb::-webkit-scrollbar {
+  display: none;
+}
+.lb::backdrop {
+  background: rgba(29, 20, 16, 0.7);
+}
+.lbHead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 10px 10px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.lbHead h3 {
+  font-size: 1.6rem;
+}
+.lbx {
+  all: unset;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 6px 14px;
+}
+.lbx:focus-visible,
+.lbGrid figure:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+.lbGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  gap: 10px;
+  padding: 16px;
+}
+.lbGrid figure {
+  margin: 0;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: var(--line);
+}
+.lbGrid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.lbGrid figure.zoom {
+  grid-column: 1/-1;
+  aspect-ratio: auto;
+  cursor: zoom-out;
+}
+.lbGrid figure.zoom img {
+  height: auto;
+  max-height: calc(100vh - 130px);
+  max-height: calc(100dvh - 130px);
+  object-fit: contain;
+  margin: auto;
+}
+/*================================================*/
+
+@media (hover: none) {
+  .lbNav {
+    display: none;
+  }
+} /* en celulares se desliza con el dedo */
+
+/* ===== AJUSTES SEGÚN EL TAMAÑO DE PANTALLA ===== */
+
+/* Teléfonos pequeños (hasta 480px) */
+@media (max-width: 480px) {
+  .two {
+    grid-template-columns: 1fr;
+  } /* nombre y edad, uno debajo del otro */
+  .mrow .btn,
+  .arrows .btn {
+    flex: 1 1 100%;
+  } /* botones a lo ancho */
+  nav {
+    gap: 0 12px;
+  }
+}
+
+/* Tablets y pantallas medianas (desde 768px) */
+@media (min-width: 768px) {
+  .track > *,
+  .igPosts > * {
+    flex-basis: 340px;
+  }
+}
+
+/* Computadoras y pantallas grandes (desde 1200px) */
+@media (min-width: 1200px) {
+  .wrap {
+    max-width: 1180px;
+  }
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+/* Teléfonos acostados (poca altura) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero img {
+    width: 150px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ===== Visor de fotos (flechas a los lados) ===== */
+.visor {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  background: rgba(0, 0, 0, 0.94);
+  color: #fff;
+  overflow: hidden;
+}
+.visor::backdrop {
+  background: #000;
+}
+.visor[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.visor img {
+  max-width: calc(100% - 150px);
+  max-height: calc(100% - 100px);
+  object-fit: contain;
+  border-radius: 8px;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.vx {
+  all: unset;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 2.2rem;
+  line-height: 1;
+  padding: 8px 14px;
+  z-index: 2;
+}
+.vCount {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-weight: 700;
+}
+.vnav {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  font-size: 2.8rem;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  z-index: 2;
+}
+.vnav:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.vprev {
+  left: 12px;
+}
+.vnext {
+  right: 12px;
+}
+.vx:focus-visible,
+.vnav:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .visor img {
+    max-width: 100%;
+    max-height: calc(100% - 120px);
+  }
+  .vnav {
+    width: 44px;
+    height: 56px;
+    font-size: 2.2rem;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .vprev {
+    left: 6px;
+  }
+  .vnext {
+    right: 6px;
+  }
+}
+
+/* ===== Encargados: tarjetas con botón de WhatsApp ===== */
+.enc {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px;
+  margin-top: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.enc-ini {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  background: var(--blue);
+  color: var(--on-color);
+}
+.enc-info {
+  flex: 1 1 150px;
+  min-width: 0;
+  line-height: 1.3;
+}
+.enc-info b {
+  display: block;
+}
+.enc-info small {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.wa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #0b3d1d;
+  font-weight: 700;
+  text-decoration: none;
+}
+.wa:hover {
+  filter: brightness(1.07);
+}
+.wa:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .wa {
+    flex: 1 1 100%;
+  }
+}
+
+/* ===== Footer con fondo ===== */
+.foot {
+  position: relative;
+  margin-top: 80px;
+  padding: 26px 20px calc(34px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(
+      60% 90% at 85% 100%,
+      rgba(232, 165, 58, 0.18),
+      transparent 70%
+    ),
+    radial-gradient(
+      60% 90% at 10% 100%,
+      rgba(31, 58, 138, 0.45),
+      transparent 70%
+    ),
+    linear-gradient(180deg, #2a1810 0%, #1b1030 100%);
+  color: #f6ebdc;
+  text-align: center;
+}
+.foot-wave {
+  position: absolute;
+  left: 0;
+  top: -59px;
+  width: 100%;
+  height: 60px;
+  display: block;
+}
+.foot-logo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  border: 3px solid var(--gold);
+}
+.foot-name {
+  margin: 10px 0 0;
+  font-family: "Kaushan Script", "DM Sans", cursive;
+  font-size: 1.9rem;
+  line-height: 1.2;
+}
+.foot-tag {
+  margin: 2px 0 16px;
+  color: #d9c3ad;
+}
+.foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.foot-links a {
+  text-decoration: none;
+  padding: 9px 18px;
+  min-height: 40px;
+  border: 1.5px solid rgba(246, 235, 220, 0.35);
+  border-radius: 999px;
+  font-weight: 500;
+  color: #f6ebdc;
+}
+.foot-links a:hover {
+  background: rgba(246, 235, 220, 0.12);
+  border-color: var(--gold);
+}
+.foot-links a:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+.foot small {
+  display: block;
+  color: #c9b49f;
+  font-size: 0.9rem;
+}
+
+/* ===== Créditos de la página ===== */
+.foot-credit {
+  max-width: 420px;
+  margin: 0 auto 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(246, 235, 220, 0.2);
+  color: #d9c3ad;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.foot-credit b {
+  color: #f6ebdc;
+}
+.foot-credit a {
+  color: var(--gold);
+  font-weight: 700;
+  text-decoration: none;
+}
+.foot-credit a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Aparición suave al hacer scroll ===== */
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+}
+.js-reveal .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+.hero img,
+.hero p {
+  animation: subir 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.hero p {
+  animation-delay: 0.15s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero img,
+  .hero p {
+    animation: none;
+  }
+}
