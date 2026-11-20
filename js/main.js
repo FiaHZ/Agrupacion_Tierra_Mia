@@ -20,6 +20,7 @@ const CONFIG = {
         { src: "images/ensayos/2.png", titulo: "Ensayo general" },
         { src: "images/ensayos/3.png", titulo: "Ensayo general" },
         { src: "images/ensayos/4.png", titulo: "Ensayo general" },
+        { src: "images/ensayos/5.jpeg", titulo: "Ensayo general" }
       ],
     },
     {
