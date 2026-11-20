@@ -8,7 +8,7 @@ const CONFIG = {
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7LzOHIcjAUvBkmr9nRDitOLnUf8ovfjJ0JnRDOX2IgEeiKB6BZYIvNCdB7w9jSYZGWUVjiUVehRyR/pub?gid=0&single=true&output=csv",
   // Enlace de la aplicación web de Google Apps Script (termina en /exec)
   formularioURL:
-    "https://script.google.com/macros/s/AKfycbz3Sf8AJyeEkbdxxRxT83M2tMQgEFdbW5k5SZXdxH7INuU9M8gXOsViCLT8mzzGedfI/exec",
+    "https://script.google.com/macros/s/AKfycbwdjufLKLVZXAz9BfcFUYqZlm9ETru5llTmat0k7LcU5yN3htSkb_EPexJvloneU380aw/exec",
   maxTiktoks: 4,
   maxInstagram: 6,
   // Álbumes: cada uno es como una carpeta. Al tocarlo se abren sus fotos.
