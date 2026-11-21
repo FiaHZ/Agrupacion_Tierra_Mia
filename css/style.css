@@ -913,3 +913,44 @@ dialog::-webkit-scrollbar {
     animation: none;
   }
 }
+
+/* ===== Animación de los botones Anterior / Siguiente ===== */
+.arrows .btn.line {
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Con el cursor encima (solo en computadora, para que no se quede pegado en el celular) */
+@media (hover: hover) {
+  .arrows .btn.line:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--on-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+  }
+}
+
+/* Al presionar (con el mouse o con el dedo): se hunde y cambia a rojo */
+.arrows .btn.line:active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--on-color);
+  transform: scale(0.92);
+  box-shadow: none;
+}
+
+/* Si la persona tiene activada la opción de reducir animaciones */
+@media (prefers-reduced-motion: reduce) {
+  .arrows .btn.line {
+    transition: none;
+  }
+  .arrows .btn.line:hover,
+  .arrows .btn.line:active {
+    transform: none;
+  }
+}
