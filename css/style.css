@@ -937,8 +937,8 @@ dialog::-webkit-scrollbar {
 
 /* Al presionar (con el mouse o con el dedo): se hunde y cambia a rojo */
 .arrows .btn.line:active {
-  background: var(--red);
-  border-color: var(--red);
+  background: var(--blue);
+  border-color: var(--blue);
   color: var(--on-color);
   transform: scale(0.92);
   box-shadow: none;

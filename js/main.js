@@ -456,3 +456,5 @@ if ("IntersectionObserver" in window) {
   );
   els.forEach((el) => io.observe(el));
 }
+
+document.addEventListener("touchstart", () => {}, { passive: true });
