@@ -955,3 +955,149 @@ dialog::-webkit-scrollbar {
     transform: none;
   }
 }
+
+/* ===== ÁLBUMES GRANDES Y LLAMATIVOS ===== */
+.gallery {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 24px;
+}
+.album,
+.js-reveal .album.reveal {
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    translate 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.album {
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.3);
+}
+.album:hover {
+  translate: 0 -8px;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.45),
+    0 0 0 3px var(--gold);
+}
+
+/* Las fotos se acercan despacio mientras pasan */
+.album .slide {
+  transform: scale(1.1);
+  transition:
+    opacity 1.2s ease,
+    transform 6s ease-out;
+}
+.album .slide.on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Sombra para que el título se lea sobre cualquier foto */
+.album::after {
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.82),
+    rgba(0, 0, 0, 0.18) 55%,
+    transparent
+  );
+}
+
+/* Título grande con la letra del logo */
+.album span {
+  left: 24px;
+  right: 24px;
+  bottom: 20px;
+  font-family: "Kaushan Script", "DM Sans", cursive;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+.album small {
+  display: inline-block;
+  margin-left: 20px;
+  margin-top: 10px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-shadow: none;
+  opacity: 1;
+}
+
+/* Etiqueta "Ver álbum" arriba a la derecha */
+.album:not(.vacio)::before {
+  content: "Ver álbum ›";
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #2a1810;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease;
+}
+.album:not(.vacio):hover::before {
+  transform: scale(1.1);
+}
+
+/* Álbum sin fotos todavía */
+.album.vacio {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+  border: 2px dashed rgba(255, 255, 255, 0.35);
+  box-shadow: none;
+}
+.album.vacio:hover {
+  translate: none;
+  box-shadow: none;
+}
+.album.vacio::before {
+  content: "✦";
+  font-size: 2.2rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.album.vacio::after {
+  display: none;
+}
+.album.vacio span {
+  position: static;
+  padding: 0 20px;
+  text-align: center;
+}
+.album.vacio small {
+  display: block;
+  max-width: 30ch;
+  margin: 10px auto 0;
+  padding: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .album,
+  .js-reveal .album.reveal,
+  .album .slide,
+  .album:not(.vacio)::before {
+    transition: none;
+  }
+  .album:hover {
+    translate: none;
+  }
+}
