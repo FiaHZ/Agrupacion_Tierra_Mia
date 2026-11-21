@@ -916,15 +916,16 @@ dialog::-webkit-scrollbar {
 
 /* ===== Animación de los botones Anterior / Siguiente ===== */
 .arrows .btn.line {
+  -webkit-tap-highlight-color: transparent;
   transition:
-    transform 0.15s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.2s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-/* Con el cursor encima (solo en computadora, para que no se quede pegado en el celular) */
+/* Con el cursor encima (solo en computadora) */
 @media (hover: hover) {
   .arrows .btn.line:hover {
     background: var(--blue);
@@ -935,8 +936,9 @@ dialog::-webkit-scrollbar {
   }
 }
 
-/* Al presionar (con el mouse o con el dedo): se hunde y cambia a rojo */
+/* Al presionar: el cambio es inmediato y al soltar vuelve suave */
 .arrows .btn.line:active {
+  transition-duration: 0s;
   background: var(--blue);
   border-color: var(--blue);
   color: var(--on-color);
@@ -944,7 +946,6 @@ dialog::-webkit-scrollbar {
   box-shadow: none;
 }
 
-/* Si la persona tiene activada la opción de reducir animaciones */
 @media (prefers-reduced-motion: reduce) {
   .arrows .btn.line {
     transition: none;
