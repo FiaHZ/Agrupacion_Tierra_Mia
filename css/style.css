@@ -459,8 +459,31 @@ dialog::-webkit-scrollbar {
   outline: 3px solid var(--blue);
   outline-offset: 3px;
 }
+.album .slide {
+  opacity: 0;
+  transition:
+    opacity 1s ease,
+    transform 0.3s;
+}
+.album .slide.on {
+  opacity: 1;
+}
 .album.vacio {
   cursor: default;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.album.vacio::after {
+  display: none;
+}
+.album.vacio span {
+  position: static;
+  padding: 0 16px;
+}
+.album.vacio small {
+  margin-top: 6px;
+  line-height: 1.4;
 }
 
 /* ===== Modal del álbum: todas las fotos en cuadrícula ===== */

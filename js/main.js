@@ -15,26 +15,15 @@ const CONFIG = {
   albumes: [
     {
       titulo: "Momentos",
-      fotos: [
-        { src: "images/ensayos/1.png", titulo: "Ensayo en el salón" },
-        { src: "images/ensayos/2.png", titulo: "Ensayo general" },
-        { src: "images/ensayos/3.png", titulo: "Ensayo general" },
-        { src: "images/ensayos/4.png", titulo: "Ensayo general" },
-        { src: "images/ensayos/5.jpeg", titulo: "Ensayo general" }
-      ],
+      drive: "momentos",
+      fotos: [],
     },
+
     {
       titulo: "Presentaciones",
-      fotos: [
-        {
-          src: "images/presentaciones/1.jpg",
-          titulo: "Presentación en Tilarán",
-        },
-        {
-          src: "images/presentaciones/2.jpg",
-          titulo: "Presentación en el festival",
-        },
-      ],
+      mensaje: "¡Pronto subiremos fotos!",
+      drive: "presentaciones",
+      fotos: [],
     },
   ],
   encargados: [
@@ -153,6 +142,8 @@ async function init() {
     loadScript("https://www.instagram.com/embed.js");
   } else {
     $("igPosts").hidden = true;
+    $("igPrev").style.display = "none";
+    $("igNext").style.display = "none";
   }
 }
 
@@ -164,26 +155,110 @@ $("prev").onclick = () =>
   $("track").scrollBy({ left: -360, behavior: "smooth" });
 $("next").onclick = () =>
   $("track").scrollBy({ left: 360, behavior: "smooth" });
+$("igPrev").onclick = () =>
+  $("igPosts").scrollBy({ left: -360, behavior: "smooth" });
+$("igNext").onclick = () =>
+  $("igPosts").scrollBy({ left: 360, behavior: "smooth" });
 init();
 
 // Galería en álbumes
-if (CONFIG.albumes.length) {
+// Fotos que no se pudieron cargar (archivo que todavía no se subió): se ignoran
+const rotas = new Set();
+
+// Tarjetas para un álbum sin fotos y para uno que está cargando
+const albumVacio = (a) =>
+  `<div class="album vacio"><span>${a.titulo}<small>${a.mensaje || "Próximamente subiremos fotos aquí"}</small></span></div>`;
+const albumCargando = (a) =>
+  `<div class="album vacio"><span>${a.titulo}<small>Cargando fotos…</small></span></div>`;
+
+function pintarGaleria() {
+  if (!CONFIG.albumes.length) {
+    $("gallery").innerHTML = ["Ensayos", "Presentaciones"]
+      .map((t) => albumVacio({ titulo: t }))
+      .join("");
+    return;
+  }
   $("gallery").innerHTML = CONFIG.albumes
     .map((a, i) => {
-      const portada = a.portada || (a.fotos[0] && a.fotos[0].src) || "";
+      if (a.cargando) return albumCargando(a);
       const n = a.fotos.length;
+      if (!n) return albumVacio(a);
+      // Todas las fotos van apiladas en la portada; la clase "on" marca la que se ve
+      const slides = a.fotos
+        .map(
+          (f, k) =>
+            `<img class="slide${k === 0 ? " on" : ""}" src="${f.src}" alt=""${k ? ' loading="lazy"' : ""}>`,
+        )
+        .join("");
       return `<button class="album" type="button" data-i="${i}" aria-label="Abrir álbum ${a.titulo}">
-      ${portada ? `<img src="${portada}" alt="" loading="lazy">` : ""}
+      ${slides}
       <span>${a.titulo}<small>${n} ${n === 1 ? "foto" : "fotos"}</small></span></button>`;
     })
     .join("");
-} else {
-  $("gallery").innerHTML = ["ensayos", "presentaciones"]
-    .map(
-      (t) =>
-        `<div class="album vacio"><span>${t}<small>Pronto</small></span></div>`,
-    )
-    .join("");
+
+  // Si una foto no carga, se quita; si el álbum se queda sin fotos, muestra el mensaje
+  document.querySelectorAll(".album .slide").forEach((img) => {
+    img.addEventListener("error", () => {
+      const album = img.closest(".album");
+      rotas.add(img.getAttribute("src"));
+      img.remove();
+      const quedan = album.querySelectorAll(".slide");
+      if (!quedan.length) {
+        album.outerHTML = albumVacio(CONFIG.albumes[+album.dataset.i]);
+        return;
+      }
+      if (!album.querySelector(".slide.on")) quedan[0].classList.add("on");
+      album.querySelector("small").textContent =
+        quedan.length + (quedan.length === 1 ? " foto" : " fotos");
+    });
+  });
+}
+
+// Fotos desde Google Drive: aparecen las que subas a la carpeta, la más nueva primero
+const urlFoto = (id) => `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+CONFIG.albumes.forEach((a) => {
+  if (a.drive && CONFIG.formularioURL) a.cargando = true;
+});
+pintarGaleria();
+CONFIG.albumes.forEach(async (a) => {
+  if (!a.cargando) return;
+  try {
+    const r = await fetch(
+      CONFIG.formularioURL +
+        "?album=" +
+        encodeURIComponent(a.drive) +
+        "&t=" +
+        Date.now(),
+    );
+    const j = await r.json();
+    if (j.ok) {
+      a.fotos = j.fotos.map((f) => ({ src: urlFoto(f.id), titulo: a.titulo }));
+    }
+  } catch (e) {
+    console.error("No se pudo leer el álbum " + a.titulo + ":", e);
+  }
+  a.cargando = false;
+  pintarGaleria();
+});
+
+// Pase automático de fotos en la portada de cada álbum
+if (
+  !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)
+) {
+  let tic = 0;
+  setInterval(() => {
+    if (document.hidden) return;
+    tic++;
+    document.querySelectorAll(".album[data-i]").forEach((album, j) => {
+      // Cada álbum cambia en un momento distinto (cada 3.5 s, desfasados 0.7 s)
+      if ((tic + j) % 5) return;
+      const s = [...album.querySelectorAll(".slide")];
+      if (s.length < 2) return;
+      const i = s.findIndex((x) => x.classList.contains("on"));
+      s[i].classList.remove("on");
+      s[(i + 1) % s.length].classList.add("on");
+    });
+  }, 700);
 }
 
 // Modal con todas las fotos del álbum
@@ -194,9 +269,9 @@ let fotosAct = [],
 
 function abrirAlbum(i) {
   const a = CONFIG.albumes[i];
-  fotosAct = a.fotos;
+  fotosAct = a.fotos.filter((f) => !rotas.has(f.src));
   $("lbTitle").textContent = a.titulo;
-  grid.innerHTML = a.fotos
+  grid.innerHTML = fotosAct
     .map(
       (f, k) =>
         `<figure tabindex="0" data-k="${k}"><img src="${f.src}" alt="${f.titulo || a.titulo}" loading="lazy"></figure>`,
@@ -361,7 +436,7 @@ if ("IntersectionObserver" in window) {
   document.documentElement.classList.add("js-reveal");
   const els = [
     ...document.querySelectorAll(
-      "section h2, section .lead, .arrows, #igLink, .track, .igPosts, .album, .contact .card, .enc",
+      "section h2, section .lead, .arrows, .track, .igPosts, .album, .contact .card, .enc",
     ),
   ];
   els.forEach((el) => {
